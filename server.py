@@ -12,15 +12,9 @@ class IndexHandler(RequestHandler):
     @tornado.gen.coroutine
     def get(self):
         #self.render("index.html", user = self.current_user, tweets=[])
-        if self.current_user:
-          print(self.current_user.toString())
-          self.render("index.html", user = self.current_user, tweets=[])
-        else:
-          print('redirecting to login')
-          self.redirect("/login")
-    #use put to send location back to server
-    def put(self, location):
-        return ""
+        print(self.current_user.toString())
+        self.render("index.html", user = self.current_user, tweets=[])
+        #use put to send location back to server
 
 class TwitterLoginHandler(RequestHandler, TwitterMixin):
     @tornado.gen.coroutine
@@ -47,7 +41,7 @@ class TweetHandler(RequestHandler,TwitterMixin):
     def get(self, topic='', location='0,0'):
         print(topic)
         print(location)
-        return self.twitter_request(
+        response = yield self.twitter_request(
             "/search/tweets",
              access_token=self.get_secure_cookie("user")["access_token"]
              )
