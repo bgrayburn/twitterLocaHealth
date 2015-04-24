@@ -21,7 +21,6 @@
   $("#submit_query").click(function(e) {
     var form_vals;
     e.preventDefault();
-    console.log("");
     form_vals = _.collect($('input:text'), function(i) {
       return $(i).val();
     });

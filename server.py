@@ -6,45 +6,62 @@ from tornado.web import RequestHandler, Application, url
 from tornado.gen import coroutine
 from tornado.auth import TwitterMixin
 import tornado
+import time
 
-class IndexHandler(RequestHandler):
-    @tornado.web.authenticated
+class BaseHandler(RequestHandler):
+    def get_current_user(self):
+        return self.get_secure_cookie("user")
+
+class IndexHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        #self.render("index.html", user = self.current_user, tweets=[])
-        print(self.current_user.toString())
-        self.render("index.html", user = self.current_user, tweets=[])
+        #print(self.current_user.toString())
+        if self.get_secure_cookie("access_token", None):
+            self.render("index.html", tweets=[])
+        else:
+            self.redirect("/login")
         #use put to send location back to server
 
-class TwitterLoginHandler(RequestHandler, TwitterMixin):
+class TwitterLoginHandler(BaseHandler, TwitterMixin):
     @tornado.gen.coroutine
     def get(self):
         if self.get_argument('oauth_token', None):
             print('need to get authenticated user')
             #self.get_authenticated_user(self._on_auth)
-            user = yield self.get_authenticated_user()
+            yield self.get_authenticated_user(self._auth_callback)
             # Save the user using e.g. set_secure_cookie()
-            if not user:
-                raise tornado.web.HTTPError(500, "Twitter auth failed")
-            self.set_secure_cookie("user", tornado.escape.json_encode(user))
-            self.redirect("/")
         else:
-            yield self.authenticate_redirect()
+            yield self.authenticate_redirect(callback_uri="/login")
+        return
 
+    def _auth_callback(self,user):
+        print("hello " + user['name'])
+        if not user:
+            raise tornado.web.HTTPError(500, "Twitter auth failed")
+        #self.set_secure_cookie("user", str(tornado.escape.json_encode(user)))
+        self.set_secure_cookie("name", tornado.escape.json_encode(user['name']))
+        self.set_secure_cookie("access_token", tornado.escape.json_encode(user['access_token']))
+        print("sending you to the main page")
+        self.redirect("/")
+        return
+
+'''
     def _on_auth(self, user):
         print("auth callback time")
         if not user:
             raise tornado.web.HTTPError(500, "Twitter auth failed")
         self.set_secure_cookie("user", tornado.escape.json_encode(user))
         self.redirect("/")
+'''
 
-class TweetHandler(RequestHandler,TwitterMixin):
+
+class TweetHandler(BaseHandler,TwitterMixin):
     @tornado.gen.coroutine
     @tornado.web.authenticated
     def get(self, topic='', location='0,0'):
         print(topic)
         print(location)
-        response = yield self.twitter_request(
+        yield self.twitter_request(
             "/search/tweets",
              access_token=self.get_secure_cookie("user")["access_token"]
              )
@@ -52,8 +69,8 @@ class TweetHandler(RequestHandler,TwitterMixin):
 def make_app():
     return Application([
         url(r"/", IndexHandler),
-        #url(r"/login[?]?[A-Za-z0-9=%.]*",TwitterLoginHandler),
-        url(r"/login",TwitterLoginHandler),
+        url(r"/login[?]?[A-Za-z0-9=%_.]*",TwitterLoginHandler),
+        #url(r"/login",TwitterLoginHandler),
         url(r"/tweets/[a-zA-Z0-9.%-]+/[a-zA-Z0-9.,%-]+/?",TweetHandler)
         ],
         twitter_consumer_key = "DWndiNB6JG1JaXHh82B1AgdFC",
