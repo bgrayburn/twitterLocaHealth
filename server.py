@@ -21,12 +21,15 @@ class TwitterLoginHandler(RequestHandler, TwitterMixin):
     def get(self):
         if self.get_argument('oauth_token', None):
             print('need to get authenticated user')
-            self.get_authenticated_user(self._on_auth)
-            #user = yield self.get_authenticated_user()
+            #self.get_authenticated_user(self._on_auth)
+            user = yield self.get_authenticated_user()
             # Save the user using e.g. set_secure_cookie()
-        print('redirecting for oauth')
-        self.authenticate_redirect()
-        return
+            if not user:
+                raise tornado.web.HTTPError(500, "Twitter auth failed")
+            self.set_secure_cookie("user", tornado.escape.json_encode(user))
+            self.redirect("/")
+        else:
+            yield self.authenticate_redirect()
 
     def _on_auth(self, user):
         print("auth callback time")
