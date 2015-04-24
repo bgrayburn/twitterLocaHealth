@@ -79,7 +79,7 @@
     if (tweet_id == null) {
       tweet_id = '999999999999999999';
     }
-    return "<tr style='outline: thin solid lightgray;'><td>" + name + " - " + tweet + " - " + location + "<a href='https://twitter.com/intent/retweet?tweet_id=" + tweet_id + "' ><img src='static/img/retweet.png'></a><a href='https://twitter.com/intent/tweet?in_reply_to=" + tweet_id + "' ><img src='static/img/reply.png'></a></td></tr>";
+    return "<tr style='outline: thin solid lightgray;'><td><strong>" + name + "</strong> " + tweet + " <i>" + location + "</i><a href='https://twitter.com/intent/retweet?tweet_id=" + tweet_id + "' ><img src='static/img/retweet.png'></a><a href='https://twitter.com/intent/tweet?in_reply_to=" + tweet_id + "' ><img src='static/img/reply.png'></a></td></tr>";
   };
 
   $.stepOneBegin();
