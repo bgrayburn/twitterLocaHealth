@@ -44,7 +44,7 @@ class TwitterLoginHandler(BaseHandler, TwitterMixin):
         #self.set_secure_cookie("user", str(tornado.escape.json_encode(user)))
         self.set_secure_cookie("name", tornado.escape.json_encode(user['name']))
         self.set_secure_cookie("access_token", str(user['access_token']))
-        print("access_token: " + str(self.get_secure_cookie("access_token", None)))
+        self.write("access_token: " + str(self.get_secure_cookie("access_token", None)))
         print("sending you to the main page")
         self.redirect("/")
         return
@@ -55,7 +55,7 @@ class TweetHandler(BaseHandler,TwitterMixin):
     def get(self, topic='', lat="0.", lng="0."):
         if self.get_secure_cookie("access_token", None):
             print("topic:"+topic)
-            twit_req = "/search/tweets?q="+topic+",geocode="+str(lat)+','+str(lng) + ',5mi'
+            twit_req = "/search/tweets.json?q="+topic+",geocode="+str(lat)+','+str(lng) + ',5mi'
             print(twit_req)
             yield self.twitter_request(
                  twit_req,
