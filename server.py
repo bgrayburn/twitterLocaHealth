@@ -7,6 +7,7 @@ from tornado.gen import coroutine
 from tornado.auth import TwitterMixin
 import tornado
 import time
+import urlparse
 
 class BaseHandler(RequestHandler):
     def get_current_user(self):
@@ -17,7 +18,9 @@ class IndexHandler(BaseHandler):
     def get(self):
         #print(self.current_user.toString())
         if self.get_secure_cookie("access_token", None):
-            self.render("index.html", tweets=[])
+            self.render("index.html",
+                name=self.get_secure_cookie("name",None).split(' ')[0][1:],
+                tweets=[])
         else:
             self.redirect("/login")
         #use put to send location back to server
@@ -40,7 +43,8 @@ class TwitterLoginHandler(BaseHandler, TwitterMixin):
             raise tornado.web.HTTPError(500, "Twitter auth failed")
         #self.set_secure_cookie("user", str(tornado.escape.json_encode(user)))
         self.set_secure_cookie("name", tornado.escape.json_encode(user['name']))
-        self.set_secure_cookie("access_token", tornado.escape.json_encode(user['access_token']))
+        self.set_secure_cookie("access_token", str(user['access_token']))
+        print("access_token: " + str(self.get_secure_cookie("access_token", None)))
         print("sending you to the main page")
         self.redirect("/")
         return
@@ -48,21 +52,24 @@ class TwitterLoginHandler(BaseHandler, TwitterMixin):
 
 class TweetHandler(BaseHandler,TwitterMixin):
     @tornado.gen.coroutine
-    @tornado.web.authenticated
-    def get(self, topic='', location='0,0'):
-        print(topic)
-        print(location)
-        yield self.twitter_request(
-            "/search/tweets",
-             access_token=self.get_secure_cookie("user")["access_token"]
-             )
+    def get(self, topic='', lat="0.", lng="0."):
+        if self.get_secure_cookie("access_token", None):
+            print("topic:"+topic)
+            twit_req = "/search/tweets?q="+topic+",geocode="+str(lat)+','+str(lng) + ',5mi'
+            print(twit_req)
+            yield self.twitter_request(
+                 twit_req,
+                 access_token=self.get_secure_cookie("access_token", None)
+                 )
+        else:
+            yield self.redirect("/login")
 
 def make_app():
     return Application([
         url(r"/", IndexHandler),
         url(r"/login[?]?[A-Za-z0-9=%_.]*",TwitterLoginHandler),
         #url(r"/login",TwitterLoginHandler),
-        url(r"/tweets/[a-zA-Z0-9.%-]+/[a-zA-Z0-9.,%-]+/?",TweetHandler)
+        url(r"/tweets/([a-zA-Z0-9.%-]+)/([0-9.,%-]+)/([0-9.,%-]+)/?",TweetHandler)
         ],
         twitter_consumer_key = "DWndiNB6JG1JaXHh82B1AgdFC",
         twitter_consumer_secret = "Icf8a4KMfcI6F9rOu4aqdYzsikpVBmBhlBTuNaHJJPJirNw3Za",
