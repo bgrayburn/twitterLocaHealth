@@ -33,9 +33,8 @@ getTweets = (o)->
   tweets
   
 
-twitWidget = ()->
-  tweet_id = '5283758275887235'
-  "<li>Bob - Stuff <a href='https://twitter.com/intent/retweet?tweet_id="+tweet_id+"' ><img src='static/img/retweet.png'></a><a href='https://twitter.com/intent/tweet?in_reply_to="+tweet_id+"' ><img src='static/img/reply.png'></a></li>"
+twitWidget = (name='', tweet='', location='', tweet_id = '999999999999999999')->
+  "<li>" + name + " - " + tweet + " - " + location + "<a href='https://twitter.com/intent/retweet?tweet_id="+tweet_id+"' ><img src='static/img/retweet.png'></a><a href='https://twitter.com/intent/tweet?in_reply_to="+tweet_id+"' ><img src='static/img/reply.png'></a></li>"
 
 $.step_one_begin()
 $('#create-query').show()
