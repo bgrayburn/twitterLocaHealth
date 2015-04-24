@@ -24,8 +24,8 @@
     form_vals = _.collect($('input:text'), function(i) {
       return $(i).val();
     });
-    form_vals[2] = form_vals[1].split(",")[1];
-    form_vals[1] = form_vals[1].split(",")[0];
+    form_vals[2] = form_vals[1].split(",")[1].slice(0, 7);
+    form_vals[1] = form_vals[1].split(",")[0].slice(0, 7);
     tweet_req = "/tweets/" + _.collect(form_vals, function(v) {
       return encodeURIComponent(v);
     }).join("/");
@@ -52,7 +52,7 @@
   };
 
   twitWidget = function() {
-    return "<li>Bob - Stuff</li>";
+    return "<li>Bob - Stuff - <a href='#'>retweet</a> - <a href='#'> reply</a></li>";
   };
 
   $.step_one_begin();
