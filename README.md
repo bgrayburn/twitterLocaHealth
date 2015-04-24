@@ -1,13 +1,8 @@
-# TODO:
+#Twitter local search
+##Demo By Brian Rayburn For eMocha
 
-xGet oauth working
+Will determine you location using html5 geolocation and show you tweets within 50mi on a given search term
 
--Get tweets query working
-
--Get tweet intents working for retweet and reply
-
--Log Out Button
-
--Leaflet map (markers)
-
--Leaflet heatmap
+Thing I would add:
+- a map
+- ability to change search radius
