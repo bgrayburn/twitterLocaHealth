@@ -13,7 +13,11 @@ $.step_one_begin = ->
 $("#submit_query").click (e)->
   e.preventDefault()
   form_vals = _.collect($('input:text'), (i)-> $(i).val())
-  $.tweets = $.get("/tweets/"+_.collect(form_vals, (v)-> encodeURIComponent(v)).join("/"))
+  form_vals[2] = form_vals[1].split(",")[1]
+  form_vals[1] = form_vals[1].split(",")[0]
+  tweet_req = "/tweets/"+_.collect(form_vals, (v)-> encodeURIComponent(v)).join("/")
+  $.tweets = []
+  $.get(tweet_req, {}, (d)-> $.tweets = $.tweets.concat([d]) )
   $.step_two_begin()
   false
 

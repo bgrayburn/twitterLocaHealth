@@ -19,14 +19,20 @@
   };
 
   $("#submit_query").click(function(e) {
-    var form_vals;
+    var form_vals, tweet_req;
     e.preventDefault();
     form_vals = _.collect($('input:text'), function(i) {
       return $(i).val();
     });
-    $.tweets = $.get("/tweets/" + _.collect(form_vals, function(v) {
+    form_vals[2] = form_vals[1].split(",")[1];
+    form_vals[1] = form_vals[1].split(",")[0];
+    tweet_req = "/tweets/" + _.collect(form_vals, function(v) {
       return encodeURIComponent(v);
-    }).join("/"));
+    }).join("/");
+    $.tweets = [];
+    $.get(tweet_req, {}, function(d) {
+      return $.tweets = $.tweets.concat([d]);
+    });
     $.step_two_begin();
     return false;
   });
