@@ -32,7 +32,8 @@ getTweets = (q)->
   [1]
 
 twitWidget = ()->
-  "<li>Bob - Stuff - <a href='#'>retweet</a> - <a href='#'> reply</a></li>"
+  tweet_id = '5283758275887235'
+  "<li>Bob - Stuff <a href='https://twitter.com/intent/retweet?tweet_id="+str(tweet_id)+"' ><img src='static/img/retweet.png'></a><a href='https://twitter.com/intent/tweet?in_reply_to="+str(tweet_id)+"' ><img src='static/img/reply.png'></a></li>"
 
 $.step_one_begin()
 $('#create-query').show()

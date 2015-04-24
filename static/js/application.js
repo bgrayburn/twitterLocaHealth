@@ -52,7 +52,9 @@
   };
 
   twitWidget = function() {
-    return "<li>Bob - Stuff - <a href='#'>retweet</a> - <a href='#'> reply</a></li>";
+    var tweet_id;
+    tweet_id = '5283758275887235';
+    return "<li>Bob - Stuff <a href='https://twitter.com/intent/retweet?tweet_id=" + str(tweet_id) + "' ><img src='static/img/retweet.png'></a><a href='https://twitter.com/intent/tweet?in_reply_to=" + str(tweet_id) + "' ><img src='static/img/reply.png'></a></li>";
   };
 
   $.step_one_begin();
