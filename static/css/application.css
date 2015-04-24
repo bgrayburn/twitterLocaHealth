@@ -1,0 +1,35 @@
+body{
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.floatbox {
+  padding: 10px;
+  width: 31vw;
+  left: 5;
+  top: 5;
+  background: #333333;
+  color: lightgray;
+  alpha: .6 ;
+  z-index:2;
+}
+
+.map {
+  width:100vw;
+  height:100vh;
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:1;
+}
+
+table {
+  background: lightgray;
+}
+
+table, th, td {
+  border: darkgray;
+}
+
+td {
+  padding:5px;
+}

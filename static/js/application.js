@@ -33,7 +33,7 @@
   $.stepTwoBegin = function(fv) {
     var twit_list, wait_for_statuses;
     $('#query-results').show();
-    twit_list = $("ul#tweets");
+    twit_list = $("table#tweets");
     twit_list.empty();
     $.tweets = getTweets(fv);
     wait_for_statuses = function() {
@@ -43,7 +43,7 @@
         statuses = rspTxt['statuses'];
         $.statuses = statuses;
         return _.each($.statuses, function(t) {
-          return twit_list.append(twitWidget(t['user'], t['text'], t['place'].toString(), t['id_str']));
+          return twit_list.append(twitWidget(t['user']['name'], t['text'], t['user']['location'].toString(), t['id_str']));
         });
       } else {
         return setTimeout(wait_for_statuses, 100);
@@ -79,7 +79,7 @@
     if (tweet_id == null) {
       tweet_id = '999999999999999999';
     }
-    return "<li>" + name + " - " + tweet + " - " + location + "<a href='https://twitter.com/intent/retweet?tweet_id=" + tweet_id + "' ><img src='static/img/retweet.png'></a><a href='https://twitter.com/intent/tweet?in_reply_to=" + tweet_id + "' ><img src='static/img/reply.png'></a></li>";
+    return "<tr style='outline: thin solid lightgray;'><td>" + name + " - " + tweet + " - " + location + "<a href='https://twitter.com/intent/retweet?tweet_id=" + tweet_id + "' ><img src='static/img/retweet.png'></a><a href='https://twitter.com/intent/tweet?in_reply_to=" + tweet_id + "' ><img src='static/img/reply.png'></a></td></tr>";
   };
 
   $.stepOneBegin();

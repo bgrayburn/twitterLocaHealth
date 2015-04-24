@@ -1,19 +1,25 @@
 <html>
+<head>
+  <link rel="stylesheet" type="text/css" href="static/css/application.css">
+</head>
 <body>
-  <h1>Twitter Search</h1>
-  <h2>Hey {{name}}</h2>
-  <div id="create-query">
-    <h2>Create Query</h2>
-    <form>
-      Topic:<input type="text" id="query_topic"><br>
-      Location:<input type="text" id="query_location"> -- automatically filled with your location if possible<br>
-      <button id="submit_query">Search</button>
-    </form>
-  </div>
-  <div id="query-results">
-    <h2>Results</h2>
-    <ul id="tweets">
-    </ul>
+  <div class='floatbox'>
+    <h1>Twitter Search</h1>
+    <h2>Hey {{name}}</h2>
+    <div id="create-query">
+      <h2>Create Query</h2>
+      <form>
+        Topic:<input type="text" id="query_topic"><br>
+        Location:<input type="text" id="query_location"><br>
+        ^-- automatically filled with your location if possible<br>
+        <button id="submit_query">Search</button>
+      </form>
+    </div>
+    <div id="query-results">
+      <h2>Results</h2>
+      <table id="tweets">
+      </table>
+    </div>
   </div>
   <footer>
     <script type="text/javascript" async src="//platform.twitter.com/widgets.js"></script>

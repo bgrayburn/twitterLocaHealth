@@ -21,7 +21,7 @@ $("#submit_query").click (e)->
 #step two - query results
 $.stepTwoBegin = (fv)->
   $('#query-results').show()
-  twit_list = $("ul#tweets")
+  twit_list = $("table#tweets")
   twit_list.empty()
   $.tweets = getTweets(fv)
   wait_for_statuses = ()->
@@ -31,7 +31,7 @@ $.stepTwoBegin = (fv)->
       $.statuses = statuses
       _.each(
         $.statuses,
-        (t) -> twit_list.append(twitWidget(t['user'], t['text'], t['place'].toString(), t['id_str']))
+        (t) -> twit_list.append(twitWidget(t['user']['name'], t['text'], t['user']['location'].toString(), t['id_str']))
       )
     else
       setTimeout(wait_for_statuses,100)
@@ -50,7 +50,7 @@ getTweets = (fv)->
 $.getTweetTest = ()->getTweets(['ravens',39.3313.toString(),-76.613.toString()])  
 
 twitWidget = (name='', tweet='', location='', tweet_id = '999999999999999999')->
-  "<li>" + name + " - " + tweet + " - " + location + "<a href='https://twitter.com/intent/retweet?tweet_id="+tweet_id+"' ><img src='static/img/retweet.png'></a><a href='https://twitter.com/intent/tweet?in_reply_to="+tweet_id+"' ><img src='static/img/reply.png'></a></li>"
+  "<tr style='outline: thin solid lightgray;'><td>" + name + " - " + tweet + " - " + location + "<a href='https://twitter.com/intent/retweet?tweet_id="+tweet_id+"' ><img src='static/img/retweet.png'></a><a href='https://twitter.com/intent/tweet?in_reply_to="+tweet_id+"' ><img src='static/img/reply.png'></a></td></tr>"
 
 $.stepOneBegin()
 $('#create-query').show()
