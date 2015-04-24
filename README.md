@@ -1,7 +1,7 @@
 #Twitter local search
 ##Demo By Brian Rayburn For eMocha
 
-Will determine you location using html5 geolocation and show you tweets within 50mi on a given search term
+Will determine your location using html5 geolocation and show you tweets within 50mi on a given search term
 
 Thing I would add:
 - a map
