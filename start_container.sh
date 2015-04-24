@@ -1,3 +1,3 @@
 docker kill twitterSearch
 docker rm twitterSearch
-docker run --name="twitterSearch" -it twittersearch /bin/bash
+docker run -p 80:80 --name="twitterSearch" -it twittersearch /bin/bash
