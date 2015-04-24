@@ -1,5 +1,5 @@
 #step one - define query
-$.step_one_begin = ->
+$.stepOneBegin = ->
   #geolocate
   success = (position)->
     console.log("Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude)
@@ -15,27 +15,48 @@ $("#submit_query").click (e)->
   form_vals = _.collect($('input:text'), (i)-> $(i).val())
   form_vals[2] = form_vals[1].split(",")[1].slice(0,7)
   form_vals[1] = form_vals[1].split(",")[0].slice(0,7)
-  $.tweets = getTweets(form_vals)
-  $.step_two_begin()
+  $.stepTwoBegin(form_vals)
   false
 
 #step two - query results
-$.step_two_begin = ->
+$.stepTwoBegin = (fv)->
   $('#query-results').show()
   twit_list = $("ul#tweets")
   twit_list.empty()
-  _.each(getTweets("test"), (t) -> twit_list.append(twitWidget()))
+  #$.tweets = JSON.parse(getTweets(fv).responseText)
+  $.tweets = getTweets(fv)
+  wait_for_statuses = ()->
+    if ($.tweets!=undefined)&&($.tweets.responseText!=undefined)
+      console.log($.tweets.responseText)
+      rspTxt = JSON.parse($.tweets.responseText)
+      console.log("ind2")
+      console.log(rspTxt)
+      statuses = rspTxt['statuses']
+      $.statuses = statuses
+      _.each(
+        $.statuses,
+        (t) -> twit_list.append(twitWidget(t['user'], t['text'], t['place'].toString(), t['id_str']))
+        #(t) -> console.log(t)
+      )
+    else
+      setTimeout(wait_for_statuses,100)
+  wait_for_statuses()
 
-getTweets = (o)->
-  tweets = []
-  tweet_req = "/tweets/"+_.collect(o, (v)-> encodeURIComponent(v)).join("/")
-  $.get(tweet_req, {}, (d)-> tweets = tweets.concat([d]) )
-  tweets
-  
+
+getTweets = (fv)->
+  tweet_req = "/tweets/"+_.collect(fv, (v)-> encodeURIComponent(v)).join('/')
+  #$.get(tweet_req, {}, (d)-> tweets = tweets.concat([d]) )
+  #console.log("i'm about to print your tweets")
+  $.get(tweet_req, {}, (d)-> 
+    #console.log()
+    d
+   )
+
+$.getTweetTest = ()->getTweets(['ravens',39.3313.toString(),-76.613.toString()])  
 
 twitWidget = (name='', tweet='', location='', tweet_id = '999999999999999999')->
   "<li>" + name + " - " + tweet + " - " + location + "<a href='https://twitter.com/intent/retweet?tweet_id="+tweet_id+"' ><img src='static/img/retweet.png'></a><a href='https://twitter.com/intent/tweet?in_reply_to="+tweet_id+"' ><img src='static/img/reply.png'></a></li>"
 
-$.step_one_begin()
+$.stepOneBegin()
 $('#create-query').show()
 $('#query-results').hide()

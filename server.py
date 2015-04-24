@@ -8,6 +8,7 @@ from tornado.auth import TwitterMixin
 import tornado
 import time
 import urlparse
+import json
 
 class BaseHandler(RequestHandler):
     def get_current_user(self):
@@ -43,8 +44,10 @@ class TwitterLoginHandler(BaseHandler, TwitterMixin):
             raise tornado.web.HTTPError(500, "Twitter auth failed")
         #self.set_secure_cookie("user", str(tornado.escape.json_encode(user)))
         self.set_secure_cookie("name", tornado.escape.json_encode(user['name']))
-        self.set_secure_cookie("access_token", str(user['access_token']))
-        self.write("access_token: " + str(self.get_secure_cookie("access_token", None)))
+        self.set_secure_cookie("access_token", tornado.escape.json_encode(user['access_token']))
+        #print("user keys:" + ",\n".join([str(k) for k in user.keys()]))
+        #print("access_token from user object: " + tornado.escape.json_encode(user['access_token']))
+        #print("access_token['key']: " + str(self.get_secure_cookie("access_token")['key']))
         print("sending you to the main page")
         self.redirect("/")
         return
@@ -54,13 +57,15 @@ class TweetHandler(BaseHandler,TwitterMixin):
     @tornado.gen.coroutine
     def get(self, topic='', lat="0.", lng="0."):
         if self.get_secure_cookie("access_token", None):
-            print("topic:"+topic)
-            twit_req = "/search/tweets.json?q="+topic+",geocode="+str(lat)+','+str(lng) + ',5mi'
-            print(twit_req)
-            yield self.twitter_request(
-                 twit_req,
-                 access_token=self.get_secure_cookie("access_token", None)
+            decoded_access_token = tornado.escape.json_decode(self.get_secure_cookie("access_token", None))
+            tweet = yield self.twitter_request(
+                 '/search/tweets',
+                 access_token = decoded_access_token,
+                 q = topic,
+                 geocode = str(lat) + ',' + str(lng) + ',500mi',
+                 result_type='recent'
                  )
+            self.write(json.dumps(tweet))
         else:
             yield self.redirect("/login")
 
