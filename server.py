@@ -45,15 +45,6 @@ class TwitterLoginHandler(BaseHandler, TwitterMixin):
         self.redirect("/")
         return
 
-'''
-    def _on_auth(self, user):
-        print("auth callback time")
-        if not user:
-            raise tornado.web.HTTPError(500, "Twitter auth failed")
-        self.set_secure_cookie("user", tornado.escape.json_encode(user))
-        self.redirect("/")
-'''
-
 
 class TweetHandler(BaseHandler,TwitterMixin):
     @tornado.gen.coroutine
