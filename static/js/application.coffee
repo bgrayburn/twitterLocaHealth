@@ -55,3 +55,4 @@ twitWidget = (name='', tweet='', location='', tweet_id = '999999999999999999')->
 $.stepOneBegin()
 $('#create-query').show()
 $('#query-results').hide()
+

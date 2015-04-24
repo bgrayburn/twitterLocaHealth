@@ -1,5 +1,6 @@
 body{
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: darkgray;
 }
 
 .floatbox {
@@ -8,7 +9,7 @@ body{
   left: 5;
   top: 5;
   background: #333333;
-  color: lightgray;
+  color: lightblue;
   alpha: .6 ;
   z-index:2;
 }
@@ -23,11 +24,11 @@ body{
 }
 
 table {
-  background: lightgray;
+  background: lightblue;
 }
 
 table, th, td {
-  border: darkgray;
+  border: black;
 }
 
 td {
