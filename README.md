@@ -7,3 +7,4 @@ Thing I would add:
 - a map
 - ability to change search radius
 - ability to use address for location (geocoding)
+- mobile responsive
