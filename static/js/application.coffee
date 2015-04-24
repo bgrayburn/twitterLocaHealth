@@ -23,20 +23,15 @@ $.stepTwoBegin = (fv)->
   $('#query-results').show()
   twit_list = $("ul#tweets")
   twit_list.empty()
-  #$.tweets = JSON.parse(getTweets(fv).responseText)
   $.tweets = getTweets(fv)
   wait_for_statuses = ()->
     if ($.tweets!=undefined)&&($.tweets.responseText!=undefined)
-      console.log($.tweets.responseText)
       rspTxt = JSON.parse($.tweets.responseText)
-      console.log("ind2")
-      console.log(rspTxt)
       statuses = rspTxt['statuses']
       $.statuses = statuses
       _.each(
         $.statuses,
         (t) -> twit_list.append(twitWidget(t['user'], t['text'], t['place'].toString(), t['id_str']))
-        #(t) -> console.log(t)
       )
     else
       setTimeout(wait_for_statuses,100)

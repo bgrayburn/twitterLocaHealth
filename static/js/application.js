@@ -39,10 +39,7 @@
     wait_for_statuses = function() {
       var rspTxt, statuses;
       if (($.tweets !== void 0) && ($.tweets.responseText !== void 0)) {
-        console.log($.tweets.responseText);
         rspTxt = JSON.parse($.tweets.responseText);
-        console.log("ind2");
-        console.log(rspTxt);
         statuses = rspTxt['statuses'];
         $.statuses = statuses;
         return _.each($.statuses, function(t) {
