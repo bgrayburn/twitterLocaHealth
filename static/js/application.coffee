@@ -14,7 +14,7 @@ $("#submit_query").click (e)->
   e.preventDefault()
   console.log("")
   form_vals = _.collect($('input:text'), (i)-> $(i).val())
-  $.get("/tweets/"+_.collect(form_vals, (v)-> encodeURIComponent(v)).join("/"))
+  $.tweets = $.get("/tweets/"+_.collect(form_vals, (v)-> encodeURIComponent(v)).join("/"))
   $.step_two_begin()
   false
 

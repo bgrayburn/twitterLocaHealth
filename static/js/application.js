@@ -25,7 +25,7 @@
     form_vals = _.collect($('input:text'), function(i) {
       return $(i).val();
     });
-    $.get("/tweets/" + _.collect(form_vals, function(v) {
+    $.tweets = $.get("/tweets/" + _.collect(form_vals, function(v) {
       return encodeURIComponent(v);
     }).join("/"));
     $.step_two_begin();
