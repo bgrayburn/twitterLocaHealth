@@ -6,3 +6,4 @@ Will determine your location using html5 geolocation and show you tweets within 
 Thing I would add:
 - a map
 - ability to change search radius
+- ability to use address for location (geocoding)
